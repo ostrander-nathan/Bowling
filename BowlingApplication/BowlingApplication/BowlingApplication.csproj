@@ -246,6 +246,7 @@
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="DAL\Frame.cs" />
     <Compile Include="DAL\Game.cs" />
+    <Compile Include="DAL\Scorer.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

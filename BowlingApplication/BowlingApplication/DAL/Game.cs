@@ -7,29 +7,47 @@ namespace BowlingApplication.DAL
 {
     public class Game
     {
-        private int score;
-        private int[] throws = new int[21];
-        private int currentThrow; 
+        private int currentFrame = 0;
+        private bool isFirstThrow = true;
+        private Scorer scorer = new Scorer();
 
         public int Score
         {
-            get { return score; }
+            get { return ScoreForFrame(currentFrame); }
         }
 
         public void Add(int pins)
         {
-            throws[currentThrow++] = pins;
-            score += pins;
+            scorer.AddThrow(pins);
+            AdjustCurrentFrame(pins);
         }
 
-        public int ScoreForFrame(int frame)
+        private void AdjustCurrentFrame(int pins)
         {
-            int score = 0;
-            for(int ball = 0; frame < 0 && ball < currentThrow; ball+=2, frame--)
-            {
-                score += throws[ball] + throws[ball + 1];
-            }
-            return score;
+            if (LastBallInFrame(pins))
+                AdvanceFrame();
+            else
+                isFirstThrow = false;
+        }
+        private bool LastBallInFrame(int pins)
+        {
+            return Strike(pins) || (!isFirstThrow);
+        }
+
+        private bool Strike(int pins)
+        {
+            return (isFirstThrow && pins == 10);
+        }
+
+        private void AdvanceFrame()
+        {
+            currentFrame++;
+            if (currentFrame > 10)
+                currentFrame = 10;
+        }
+        public int ScoreForFrame(int theFrame)
+        {
+            return scorer.ScoreForFrame(theFrame);
         }
     }
 }
